@@ -10,16 +10,17 @@ Just clone the repository to a folder of your choice (e.g. /opt/html_system_moni
 
 ### Configuration
 
-To get a basic configuration, run
-`./static_html_monitor.py --configure_plugins`
+To get a basic configuration, run `./static_html_monitor.py --configure_plugins`.
 This will create the file config/plugins.json. Edit this file to your needs.
 
 There is also a file called config/config.json. This file configures some internally used paths.
 
 ### Run the script
 
-This script is meant to be run as a cron job. E.g.: To update the site every 5 minutes, create a file in /etc/cron.d/ and add something like this:
-`*/5  *   * * *       root    /opt/html_system_monitor/html_system_monitor.py`
+This script is meant to be run as a cron job. E.g.: To update the site every 5 minutes, create a file in `/etc/cron.d/` and add something like this:
+```
+*/5  *   * * *       root    /opt/html_system_monitor/html_system_monitor.py
+```
 
 ### Configure web server
 
@@ -49,6 +50,7 @@ The command to run the plugin and its command line arguments are configured in c
 ### Run plugins externally
 
 Alternatively any plugin can be called outside of the script and its output piped into a file. The script can then collect the outputs. **Be aware that the collected files will be deleted after collection!**
+
 For example, to execute the df plugin externally, crate the folder /opt/html_system_monitor/data/ and use this command:
 `/opt/html_system_monitor/plugins/plugin_df.py /mnt/data 80 90 > /opt/html_system_monitor/data/df_data.json`
 
@@ -61,4 +63,4 @@ You can then add this to your config/plugins.json to collect the data:
 }
 ```
 
-Stale age is the age of the data in seconds after which the data is considered stale (i.e.: not up-to-date).
+**stale_age** is the age of the data in seconds after which the data is considered stale (i.e.: not up-to-date).
