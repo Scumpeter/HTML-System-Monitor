@@ -1,0 +1,165 @@
+body {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: flex-start;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #000000;
+    color: #e6e6e6;
+}
+
+div.timestamp {
+    font-size: 0.8em;
+    color: 797979;
+}
+
+div.main {
+    width: 100%
+}
+
+div.header_box, div.plugin {
+    display: flex;
+    flex-flow: column wrap;
+    background-color: #2c2c2c;
+    margin: 0em;
+}
+
+div.header, div.content {
+    padding: 0.2em;
+    margin: 0em;
+    border: 1px solid #797979;
+    min-height: 1em;
+    display: flex;
+    align-items: center;
+}
+
+div.header {
+    font-weight: bold;
+    background-color: rgb(0, 93, 168);
+}
+
+div.show_always, div.show_on_demand {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    display: flex;
+}
+
+div.show_on_demand {
+    display: none;
+    flex-flow: column wrap;
+    background-color: #666666;
+}
+
+div.plugin_name {
+    width: 10em;
+    flex-grow: 1;
+}
+
+div.plugin_state {
+    width: 2.5em;
+    flex-grow: 0;
+}
+
+div.plugin_state.content {
+    justify-content: center;
+    font-weight: bold;
+}
+
+div.plugin_state_OK {
+    background-color: rgb(0, 128, 0);
+    color: rgb(255, 255, 255);
+}
+
+div.plugin_state_WARN {
+    background-color: rgb(196, 166, 0);
+    color: rgb(255, 255, 255);
+}
+
+div.plugin_state_CRIT {
+    background-color: rgb(128, 0, 0);
+    color: rgb(255, 255, 255);
+}
+
+div.plugin_percentage {
+    width: 3.5em;
+    justify-content: flex-start;
+    flex-grow: 1;
+    position: relative;
+}
+
+div.plugin_text {
+    flex-basis: 100%;
+    flex-shrink: 1;
+}
+
+div.plugin_last {
+    justify-content: flex-end;
+    flex-basis: 50%;
+    flex-shrink: 2;
+    border: 0px;
+    margin: 0px;
+}
+
+div.plugin_percentage_text {
+    font-weight: bold;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+div.progress_bar {
+    position: absolute;
+    left: 0px;
+    top: 50%;
+    transform: translate(0%, -50%);
+    background-color: rgb(0, 93, 168);;
+    height: 100%;
+    z-index: 1;
+}
+
+div.progress_bar_CRIT {
+    background-color: rgb(128, 0, 0);
+}
+
+div.progress_bar_WARN {
+    background-color: rgb(117, 100, 0);
+}
+
+@media screen and (min-width: 60.000em) {
+    div.main {
+        max-width: 90em;
+    }
+
+    div.header_box, div.plugin {
+        flex-flow: row;
+    }
+
+    div.show_on_demand {
+        background-color: #2c2c2c;;
+        display: flex;
+        flex-flow: row;
+        flex-grow: 1;
+    }
+
+    div.plugin_percentage {
+        width: 15em;
+        justify-content: flex-start;
+        position: relative;
+    }
+
+    div.plugin_text {
+        flex-basis: 50%;
+        flex-shrink: 1;
+        flex-grow: 2;
+    }
+
+    div.plugin_last {
+        justify-content: flex-start;
+        flex-basis: 15em;
+        flex-shrink: 1;
+        border: 0.1em solid #797979;
+        margin: 0px;
+    }
+}

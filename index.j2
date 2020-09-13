@@ -1,0 +1,58 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Monitor</title>
+    <link rel="stylesheet" href="default.css">
+</head>
+
+<body>
+    <div class="main">
+        <div class="header_box">
+            <div class="show_always">
+                <div class="header plugin_name">Name</div>
+                <div class="header plugin_state">State</div>
+                <div class="header plugin_percentage">%</div>
+            </div>
+            <div class="show_on_demand">
+                <div class="header plugin_text">Text</div>
+                <div class="header plugin_last">Times</div>
+            </div>
+        </div>
+        {% for plugin_index, plugin in data.plugins.items() %}<div class="plugin" id="{{plugin_index|replace('\\040', '_')}}" onclick="toggle_hidden('{{plugin_index|replace('\\040', '_')}}')">
+            <div class="show_always">
+                <div class="content plugin_name" id="{{plugin_index|replace('\\040', '_')}}_name">{{plugin.name}}</div>
+                <div class="content plugin_state plugin_state_{{plugin.state}}" id="{{plugin_index|replace('\\040', '_')}}_state">{{ plugin.state }}</div>
+                <div class="content plugin_percentage" id="{{plugin_index|replace('\\040', '_')}}_percentage" title="{{plugin.percentage}}%">{% if plugin.percentage is defined %}
+                    <div class="progress_bar progress_bar_{{plugin.state}}" style="width:{{plugin.percentage}}%"></div>
+                    <div class="plugin_percentage_text">{{plugin.percentage}}%</div>
+                {% else %}-{% endif %}</div>
+            </div>
+            <div class="show_on_demand" id="{{plugin_index|replace('\\040', '_')}}_hidden">
+                <div class="content plugin_text" id="{{plugin_index|replace('\\040', '_')}}_text">{{plugin.text}}</div>
+                <div class="content plugin_last" id="{{plugin_index|replace('\\040', '_')}}_last">
+                    Last check: {{ plugin.last_check|default(0)|timestamp_to_formated_time("%d.%m.%Y %H:%M:%S") }}<br/>
+                    Last OK: {{ plugin.last_ok|default(0)|timestamp_to_formated_time("%d.%m.%Y %H:%M:%S") }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="timestamp">HTML generated on: {{ data.time_now|timestamp_to_formated_time("%d.%m.%Y %H:%M:%S") }}</div>
+
+    <script>
+        function toggle_hidden(plugin_index) {
+            var hidden_box = document.getElementById(plugin_index.concat("_hidden"));
+            if(hidden_box) {
+                if (hidden_box.style.display === "flex") {
+                    if((window).innerWidth / parseFloat(getComputedStyle(document.querySelector('body'))['font-size']) < 60)
+                    {
+                        hidden_box.style.display = "none";
+                    }
+                } else {
+                    hidden_box.style.display = "flex";
+                }
+            }
+        }
+    </script>
+</body>

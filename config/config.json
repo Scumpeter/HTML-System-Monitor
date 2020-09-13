@@ -1,0 +1,7 @@
+{
+    "plugins_path": "plugins",
+    "plugins_config_path": "config/plugins.json",
+    "data_path": "data.json",
+    "template_path": "index.j2",
+    "output_path": "www/index.html"
+}
