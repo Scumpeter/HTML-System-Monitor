@@ -10,7 +10,7 @@ Just clone the repository to a folder of your choice (e.g. /opt/html_system_moni
 
 ### Configuration
 
-To get a basic configuration, run `./static_html_monitor.py --configure_plugins`.
+To get a basic configuration, run `./html_system_monitor.py --configure_plugins`.
 This will create the file config/plugins.json. Edit this file to your needs.
 
 There is also a file called config/config.json. This file configures some internally used paths.
