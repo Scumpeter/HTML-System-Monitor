@@ -8,9 +8,6 @@ import subprocess
 
 def run(config):
     ''' Gathers update information according to config '''
-    if(config['refresh']):
-        # i am not sure if -d will make this useless.
-        subprocess.run(['apt-get', 'update', '-qqd'])
     apt_result = subprocess.run(
         ['apt-get', '-s', 'dist-upgrade', '--quiet=2'], stdout=subprocess.PIPE)
     # This will return the updateable packages, each in one line. It has a topic
@@ -40,7 +37,7 @@ def get_default_config():
     config["apt"] = {
         "name": "Updates",
         "command": os.path.abspath(__file__),
-        "arguments": ["False", "1", "10"]
+        "arguments": ["1", "10"]
     }
     return config
 
@@ -53,10 +50,9 @@ if __name__ == "__main__":
         if (sys.argv[1] == "--print_config"):
             print(json.dumps(get_default_config()))
         else:
-            if len(sys.argv) >= 4:
-                config["refresh"] = ("True" == sys.argv[1])
-                config["limit_warn"] = int(sys.argv[2])
-                config["limit_critical"] = int(sys.argv[3])
+            if len(sys.argv) >= 3:
+                config["limit_warn"] = int(sys.argv[1])
+                config["limit_critical"] = int(sys.argv[2])
                 result = run(config)
                 print(json.dumps(result))
                 if(result["state"] == "ERROR"):
