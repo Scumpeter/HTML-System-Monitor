@@ -71,7 +71,7 @@ def collect_data(plugins_config_path, data_path):
             data[plugin_index]['last_check'] = time_now
         if 'state' in data[plugin_index] and data[plugin_index]['state'] == State.OK.value:
             data[plugin_index]['last_ok'] = data[plugin_index]['last_check']
-        else:
+        elif 'last_ok' in old_data[plugin_index]:
             data[plugin_index]['last_ok'] = old_data[plugin_index]['last_ok']
     # write data file
     with open(data_path, 'w') as data_file:
