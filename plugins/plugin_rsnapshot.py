@@ -53,20 +53,32 @@ def get_default_config(config_file_path='/etc/rsnapshot.conf'):
     e.g:
     backup	/mnt/data/	localhost/
     We only care about the [Source path] part.
+
+    If config_file_path is no file, this function will return an empty dict.
     '''
     backups = {}
-    re_backup_location = r"^\s*backup\s*(\S*)\s*(\S*)\s*$"
-    with open(config_file_path, 'r') as config_file:
-        for config_line in config_file.readlines():
-            config_match = re.search(re_backup_location, config_line)
-            if config_match != None:
-                backup_path = config_match.group(1)
-                index = "rsnapshot_{}".format(backup_path)
-                backups[index] = {
-                    "name": "Backup: {}".format(backup_path),
-                    "command": os.path.abspath(__file__),
-                    "arguments": ["/var/log/rsnapshot.log", backup_path]
-                }
+    if(os.path.isfile(config_file_path)):
+        re_backup_location = r"^\s*backup\s*(\S*)\s*(\S*)\s*$"
+        re_log_location = r"^\s*logfile\s*(\S*)\s*$"
+        log_path = "/var/log/rsnapshot.log"
+        with open(config_file_path, 'r') as config_file:
+            config_file_lines = config_file.readlines()
+            # find path to log file
+            for config_line in config_file_lines:
+                log_match = re.search(re_log_location, config_line)
+                if log_match != None:
+                    log_path = log_match.group(1)
+            # find backup locations
+            for config_line in config_file_lines:
+                config_match = re.search(re_backup_location, config_line)
+                if config_match != None:
+                    backup_path = config_match.group(1)
+                    index = "rsnapshot_{}".format(backup_path)
+                    backups[index] = {
+                        "name": "Backup: {}".format(backup_path),
+                        "command": os.path.abspath(__file__),
+                        "arguments": [log_path, backup_path]
+                    }
     return backups
 
 
