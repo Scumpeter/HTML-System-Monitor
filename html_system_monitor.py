@@ -44,6 +44,7 @@ def collect_data(plugins_config_path, data_path):
     """
     full_plugin_config = get_json_or_empty_dict(plugins_config_path)
     data = get_json_or_empty_dict(data_path)
+    old_data = data
     time_now = datetime.now().timestamp()
     for plugin_index, plugin_config in full_plugin_config.items():
         if not plugin_index in data:
@@ -70,6 +71,8 @@ def collect_data(plugins_config_path, data_path):
             data[plugin_index]['last_check'] = time_now
         if 'state' in data[plugin_index] and data[plugin_index]['state'] == State.OK.value:
             data[plugin_index]['last_ok'] = data[plugin_index]['last_check']
+        else:
+            data[plugin_index]['last_ok'] = old_data[plugin_index]['last_ok']
     # write data file
     with open(data_path, 'w') as data_file:
         json.dump(data, data_file, indent=4)
