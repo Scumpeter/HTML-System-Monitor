@@ -21,9 +21,9 @@ def run(config):
     if packages < 0:
         packages = 0
     state = State.UNDEF
-    if packages > config['limit_critical']:
+    if packages >= config['limit_critical']:
         state = State.CRITICAL
-    elif packages > config['limit_warn']:
+    elif packages >= config['limit_warn']:
         state = State.WARNING
     else:
         state = State.OK
