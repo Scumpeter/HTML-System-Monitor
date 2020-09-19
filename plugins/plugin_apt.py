@@ -4,7 +4,7 @@ import os
 import json
 from basics import State
 import subprocess
-
+import distutils.spawn
 
 def run(config):
     ''' Gathers update information according to config '''
@@ -32,13 +32,16 @@ def run(config):
 
 
 def get_default_config():
-    ''' Returns a dict with the default config '''
+    ''' Returns a dict with the default config if the apt-get executable is
+        in $PATH
+    '''
     config = {}
-    config["apt"] = {
-        "name": "Updates",
-        "command": os.path.abspath(__file__),
-        "arguments": ["1", "10"]
-    }
+    if distutils.spawn.find_executable("apt-get"):
+        config["apt"] = {
+            "name": "Updates",
+            "command": os.path.abspath(__file__),
+            "arguments": ["1", "10"]
+        }
     return config
 
 
