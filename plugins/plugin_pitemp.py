@@ -11,9 +11,9 @@ def run(config):
         with open(temperature_file_path, 'r') as temperature_file:
             temperature = float(temperature_file.read()) / 1000.0
             state = State.UNDEF
-            if 'limit_critical' in config and config['limit_critical'] != '0' and float(config['limit_critical']) >= temperature:
+            if 'limit_critical' in config and config['limit_critical'] != '0' and temperature >= float(config['limit_critical']):
                 state = State.CRITICAL
-            elif 'limit_warn' in config and config['limit_warn'] != '0'  and float(config['limit_warn']) >= temperature:
+            elif 'limit_warn' in config and config['limit_warn'] != '0'  and temperature >= float(config['limit_warn']):
                 state = State.WARNING
             else:
                 state = State.OK
