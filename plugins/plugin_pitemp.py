@@ -9,15 +9,19 @@ def run(config):
     temperature_file_path = '/sys/class/thermal/thermal_zone0/temp'
     if(os.path.isfile(temperature_file_path)):
         with open(temperature_file_path, 'r') as temperature_file:
+            result = {}
             temperature = float(temperature_file.read()) / 1000.0
-            state = State.UNDEF
+            result["text"] = "{:0.2f}°C".format(temperature)
+            if 'limit_critical' in config and config['limit_critical'] != '0':
+                result['percentage'] = temperature / float(config['limit_critical'])*100
             if 'limit_critical' in config and config['limit_critical'] != '0' and temperature >= float(config['limit_critical']):
-                state = State.CRITICAL
+                result['state'] = State.CRITICAL.value
+                result['percentage'] = 100
             elif 'limit_warn' in config and config['limit_warn'] != '0'  and temperature >= float(config['limit_warn']):
-                state = State.WARNING
+                result['state'] = State.WARNING.value
             else:
-                state = State.OK
-            return({"state": state.value, "text": "{:0.2f}°C".format(temperature)})
+                result['state'] = State.OK.value
+            return(result)
     else:
         return({"state": State.ERROR.value, "text": "File not found {}".format(temperature_file_path)})
 
