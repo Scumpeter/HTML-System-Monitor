@@ -13,7 +13,7 @@
             <div class="show_always">
                 <div class="header plugin_name">Name</div>
                 <div class="header plugin_state">State</div>
-                <div class="header plugin_percentage">%</div>
+                <div class="header plugin_percentage">Summary</div>
             </div>
             <div class="show_on_demand">
                 <div class="header plugin_text">Text</div>
@@ -24,7 +24,7 @@
             <div class="show_always">
                 <div class="content plugin_name" id="{{plugin_index|replace('\\040', '_')}}_name">{{plugin.name}}</div>
                 <div class="content plugin_state plugin_state_{{plugin.state}}" id="{{plugin_index|replace('\\040', '_')}}_state">{{ plugin.state }}</div>
-                <div class="content plugin_percentage" id="{{plugin_index|replace('\\040', '_')}}_percentage" title="{{plugin.percentage}}%">{% if plugin.short_text is defined %}
+                <div class="content plugin_percentage" id="{{plugin_index|replace('\\040', '_')}}_percentage">{% if plugin.short_text is defined %}
                     <div class="progress_bar progress_bar_{{plugin.state}}" style="width:{% if plugin.percentage is defined %}{{plugin.percentage}}%{% else %}0{% endif %}"></div>
                     <div class="plugin_short_text">{{plugin.short_text}}</div>
                 {% else %}-{% endif %}</div>
