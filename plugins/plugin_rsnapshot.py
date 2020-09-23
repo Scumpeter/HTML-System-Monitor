@@ -25,6 +25,7 @@ def run(config):
     '''
     re_backup_rsync_started = r"^\[(.*)\] /usr/bin/rsync .* {} .*$".format(
         config['path'])
+    re_timestamp = r"^\[(.*)\].*"
     with open(config["log_file"], 'r') as log_file:
         log_lines = log_file.read().splitlines()
         log_lines.reverse()
@@ -35,11 +36,6 @@ def run(config):
         log_match = re.search(config['path'], search_line)
         if log_match != None:
             last_log_msg = search_line
-            timestring = log_match.group(1)
-            log_time = datetime.datetime.strptime(timestring, '%Y-%m-%dT%H:%M:%S')
-            now = datetime.datetime.now()
-            timediff = now - log_time
-            short_text = ago(timediff.total_seconds())
             break
     if last_log_msg != None:
         log_match = re.search(re_backup_rsync_started, last_log_msg)
@@ -47,6 +43,13 @@ def run(config):
             state = State.OK
         else:
             state = State.CRITICAL
+        timestamp_match = re.search(re_timestamp, last_log_msg)
+        if timestamp_match != None:
+            timestring = timestamp_match.group(1)
+            log_time = datetime.datetime.strptime(timestring, '%Y-%m-%dT%H:%M:%S')
+            now = datetime.datetime.now()
+            timediff = now - log_time
+            short_text = ago(timediff.total_seconds())
     else:
         last_log_msg = 'Path {} not found in log file {}.'.format(
             config['path'], config['log_file'])
