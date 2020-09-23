@@ -22,6 +22,7 @@ def collect_default_configs(plugins_config_path, plugins_path):
     full_plugin_config = get_json_or_empty_dict(plugins_config_path)
     # iterate through plugins
     for plugin_path in glob.glob('{}/plugin_*'.format(plugins_path)):
+        print('Collecting config from: {}'.format(plugin_path))
         # run plugins with --print_config
         plugins_config_string = subprocess.run(
             [plugin_path, '--print_config'], stdout=subprocess.PIPE).stdout.decode('utf-8')

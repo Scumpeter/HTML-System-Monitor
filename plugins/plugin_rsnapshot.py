@@ -7,6 +7,7 @@ import datetime  # for parsing log time stamps
 import os       # to get path to this script for the config
 import sys      # to get command line arguments
 from basics import State
+from basics import ago
 
 
 def run(config):
@@ -28,10 +29,17 @@ def run(config):
         log_lines = log_file.read().splitlines()
         log_lines.reverse()
     state = State.UNDEF
+    short_text = "-"
     last_log_msg = None
     for search_line in log_lines:
-        if re.search(config['path'], search_line) != None:
+        log_match = re.search(config['path'], search_line)
+        if log_match != None:
             last_log_msg = search_line
+            timestring = log_match.group(1)
+            log_time = datetime.datetime.strptime(timestring, '%Y-%m-%dT%H:%M:%S')
+            now = datetime.datetime.now()
+            timediff = now - log_time
+            short_text = ago(timediff.total_seconds())
             break
     if last_log_msg != None:
         log_match = re.search(re_backup_rsync_started, last_log_msg)
@@ -42,7 +50,7 @@ def run(config):
     else:
         last_log_msg = 'Path {} not found in log file {}.'.format(
             config['path'], config['log_file'])
-    return ({"state": state.value, "text": last_log_msg})
+    return {"state": state.value, "text": last_log_msg, "short_text": short_text}
 
 
 def get_default_config(config_file_path='/etc/rsnapshot.conf'):

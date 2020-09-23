@@ -24,3 +24,32 @@ def sizeof_fmt(num, suffix='B'):
             return "%3.1f%s%s" % (num, unit, suffix)
         num /= 1024.0
     return "%.1f%s%s" % (num, 'Yi', suffix)
+
+def ago(timediff):
+    """Returns a string in the form 
+        n <UNIT> ago
+
+    <UNIT> is the biggest unit that is not 0 of
+    Seconds, Minutes, Hours, Days, Weeks
+    """
+    units = {
+        "second": 1,
+        "minute": 60,
+        "hour": 60,
+        "day": 24,
+        "week": 7
+    }
+    result = timediff
+    result_unit = list(units.keys())[0]
+    divisor = 1
+    for unit, unit_size in units.items():
+        divisor = divisor * unit_size
+        if (timediff / divisor) >= 1:
+            result = timediff / divisor
+            result_unit = unit
+        else:
+            break
+    plural_appendix = ""
+    if result != 1:
+        plural_appendix = "s"
+    return "{} {}{} ago".format(int(result), result_unit, plural_appendix)

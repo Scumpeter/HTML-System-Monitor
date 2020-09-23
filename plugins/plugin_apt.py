@@ -28,7 +28,7 @@ def run(config):
         text = '{} update available'.format(packages)
     else:
         text = '{} updates available'.format(packages)
-    return ({"state": state.value, "text": text})
+    return ({"state": state.value, "text": text, "short_text": "{}".format(packages)})
 
 
 def get_default_config():

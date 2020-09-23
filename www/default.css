@@ -100,8 +100,7 @@ div.plugin_last {
     margin: 0px;
 }
 
-div.plugin_percentage_text {
-    font-weight: bold;
+div.plugin_short_text {
     position: absolute;
     left: 50%;
     top: 50%;

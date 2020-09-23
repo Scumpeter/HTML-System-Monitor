@@ -47,7 +47,7 @@ def run(config):
         state = State.WARNING
     else:
         state = State.OK
-    return ({"state": state.value, "text": "Size: {}; Used: {}; Avail: {}".format(size, used, avail), "percentage": percentage})
+    return ({"state": state.value, "text": "Size: {}; Used: {}; Avail: {}".format(size, used, avail), "percentage": percentage, "short_text": "{}%".format(percentage)})
 
 
 def get_default_config():

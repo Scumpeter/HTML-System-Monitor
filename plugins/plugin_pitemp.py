@@ -12,6 +12,7 @@ def run(config):
             result = {}
             temperature = float(temperature_file.read()) / 1000.0
             result["text"] = "{:0.2f}°C".format(temperature)
+            result["short_text"] = "{:0.2f}°C".format(temperature)
             if 'limit_critical' in config and config['limit_critical'] != '0':
                 result['percentage'] = round(temperature / float(config['limit_critical'])*100, 1)
             if 'limit_critical' in config and config['limit_critical'] != '0' and temperature >= float(config['limit_critical']):
