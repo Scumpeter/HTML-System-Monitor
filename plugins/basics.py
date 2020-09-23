@@ -50,6 +50,6 @@ def ago(timediff):
         else:
             break
     plural_appendix = ""
-    if result != 1:
+    if int(result) != 1:
         plural_appendix = "s"
     return "{} {}{} ago".format(int(result), result_unit, plural_appendix)
