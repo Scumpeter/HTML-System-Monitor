@@ -36,6 +36,8 @@ def ago(timediff):
     <UNIT> is the biggest unit that is not 0 of
     Seconds, Minutes, Hours, Days, Weeks
     """
+    if timediff < 10:
+        return "now"
     units = {
         "second": 1,
         "minute": 60,

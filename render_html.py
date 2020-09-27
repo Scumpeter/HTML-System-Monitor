@@ -9,12 +9,14 @@ from plugins.basics import SummaryType
 from plugins.basics import ago
 
 
-def timestamp_to_formated_time(value, format='%Y-%m-%dT%H:%M:%S'):
+def timestamp_to_formated_time(value):
     ''' Jinja2 filter for getting a datetimeobject from a timestamp-string '''
     if value==0:
         return 'never'
     else:
-        return datetime.fromtimestamp(float(value)).strftime(format)
+        timediff = datetime.now() - datetime.fromtimestamp(float(value))
+        datetime_string = datetime.fromtimestamp(float(value)).strftime('%Y-%m-%dT%H:%M:%S')
+        return '<time datetime={datetime_string} title={datetime_string}>{timediff}</time>'.format(datetime_string=datetime_string, timediff=ago(timediff.total_seconds()))
 
 
 def prepare_html_data(config):
@@ -38,7 +40,7 @@ def prepare_html_data(config):
             if 'short_text' in json_data[plugin_index]['data'] and 'short_text_type' in json_data[plugin_index]['data']:
                 short_text_type = json_data[plugin_index]['data']['short_text_type']
                 if short_text_type == SummaryType.TIMESTAMP_FOR_AGE.value:
-                    result_data_plugins[plugin_index]['data']['short_text'] = ago(int(now) - int(json_data[plugin_index]['data']['short_text']))
+                    result_data_plugins[plugin_index]['data']['short_text'] = timestamp_to_formated_time(json_data[plugin_index]['data']['short_text'])
         # if no data for a configured plugin can be found, set default values
         else:
             print('No data found for plugin {}'.format(plugin_index))
