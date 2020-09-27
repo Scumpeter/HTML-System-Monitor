@@ -38,7 +38,7 @@ def prepare_html_data(config):
             if 'short_text' in json_data[plugin_index]['data'] and 'short_text_type' in json_data[plugin_index]['data']:
                 short_text_type = json_data[plugin_index]['data']['short_text_type']
                 if short_text_type == SummaryType.TIMESTAMP_FOR_AGE.value:
-                    result_data_plugins[plugin_index]['short_text'] = ago(int(now) - int(json_data[plugin_index]['data']['short_text']))
+                    result_data_plugins[plugin_index]['data']['short_text'] = ago(int(now) - int(json_data[plugin_index]['data']['short_text']))
         # if no data for a configured plugin can be found, set default values
         else:
             print('No data found for plugin {}'.format(plugin_index))

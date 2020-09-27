@@ -48,7 +48,7 @@ def run(config):
         if timestamp_match != None:
             timestring = timestamp_match.group(1)
             log_time = datetime.datetime.strptime(timestring, '%Y-%m-%dT%H:%M:%S')
-            short_text = log_time
+            short_text = log_time.timestamp()
     else:
         last_log_msg = 'Path {} not found in log file {}.'.format(
             config['path'], config['log_file'])
