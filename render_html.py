@@ -22,18 +22,19 @@ def prepare_html_data(config):
     json_data = get_json_or_empty_dict(config['data_path'])
     for plugin_index, plugin_config in json_plugins.items():
         result_data_plugins[plugin_index] = {}
+        result_data_plugins[plugin_index]['data'] = {}
         if plugin_index in json_data and 'state' in json_data[plugin_index]['data']:
             result_data_plugins[plugin_index] = json_data[plugin_index]
             if 'stale_age' in plugin_config and 'last_checked' in json_data[plugin_index]:
                 last_checked_age = datetime.now().timestamp() - float(json_data[plugin_index]['last_checked'])
                 if  last_checked_age > float(plugin_config['stale_age']):
-                    result_data_plugins[plugin_index]['state'] = State.STALE.value
+                    result_data_plugins[plugin_index]['data']['state'] = State.STALE.value
         # if no data for a configured plugin can be found, set default values
         else:
             print('No data found for plugin {}'.format(plugin_index))
-            result_data_plugins[plugin_index]['state'] = State.UNDEF.value
-            result_data_plugins[plugin_index]['text'] = 'No data yet.'
-        result_data_plugins[plugin_index]['name'] = plugin_config['name']
+            result_data_plugins[plugin_index]['data']['state'] = State.UNDEF.value
+            result_data_plugins[plugin_index]['data']['text'] = 'No data yet.'
+        result_data_plugins[plugin_index]['data']['name'] = plugin_config['name']
     result_data = {}
     result_data['time_now'] = datetime.now().timestamp()
     result_data['plugins'] = result_data_plugins
