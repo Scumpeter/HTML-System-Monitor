@@ -44,19 +44,23 @@ def collect_data(plugins_config_path, data_path):
         recognize new data.
     """
     full_plugin_config = get_json_or_empty_dict(plugins_config_path)
-    data = get_json_or_empty_dict(data_path)
-    old_data = data
+    all_data = get_json_or_empty_dict(data_path)
     time_now = datetime.now().timestamp()
+    # iterate through all configured plugins
     for plugin_index, plugin_config in full_plugin_config.items():
-        if not plugin_index in data:
-            data[plugin_index] = {}
-        # read from json file for manual plugin execution
+        # if a plugin is configured but has no data, start with an empty dict
+        if not plugin_index in all_data:
+            all_data[plugin_index] = {}
+        # if no sub dict 'data' exists, create one
+        if not 'data' in all_data[plugin_index]:
+            all_data[plugin_index]['data'] = {}
+        # read from json file for manual_path plugins
         if 'manual_path' in plugin_config:
             print('Reading from {}'.format(plugin_config['manual_path']))
             data_dict = get_json_or_empty_dict(plugin_config['manual_path'])
             if(bool(data_dict)):
-                data[plugin_index] = data_dict
-                data[plugin_index]['last_check'] = time_now
+                all_data[plugin_index]['data'] = data_dict
+                all_data[plugin_index]['last_check'] = time_now
                 # delete file after reading, so new data will be recognized as new
                 os.remove(plugin_config['manual_path'])
             else:
@@ -68,15 +72,13 @@ def collect_data(plugins_config_path, data_path):
                 plugin_config['command'], plugin_config['arguments']))
             data_string = subprocess.run(
                 [plugin_config['command'], *plugin_config['arguments']], stdout=subprocess.PIPE).stdout.decode('utf-8')
-            data[plugin_index] = json.loads(data_string)
-            data[plugin_index]['last_check'] = time_now
-        if 'state' in data[plugin_index] and data[plugin_index]['state'] == State.OK.value:
-            data[plugin_index]['last_ok'] = data[plugin_index]['last_check']
-        elif 'last_ok' in old_data[plugin_index]:
-            data[plugin_index]['last_ok'] = old_data[plugin_index]['last_ok']
+            all_data[plugin_index]['data'] = json.loads(data_string)
+            all_data[plugin_index]['last_check'] = time_now
+        if 'state' in all_data[plugin_index]['data'] and all_data[plugin_index]['data']['state'] == State.OK.value:
+            all_data[plugin_index]['last_ok'] = all_data[plugin_index]['last_check']
     # write data file
     with open(data_path, 'w') as data_file:
-        json.dump(data, data_file, indent=4)
+        json.dump(all_data, data_file, indent=4)
 
 
 if __name__ == "__main__":
