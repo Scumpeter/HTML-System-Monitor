@@ -5,14 +5,18 @@ from utils import get_json_or_empty_dict
 from utils import get_newest_timestamp
 from utils import get_last_ok
 from plugins.basics import State
+from plugins.basics import SummaryType
+from plugins.basics import ago
 
 
-def timestamp_to_formated_time(value, format='%Y-%m-%dT%H:%M:%S'):
+def timestamp_to_formated_time(value):
     ''' Jinja2 filter for getting a datetimeobject from a timestamp-string '''
     if value==0:
         return 'never'
     else:
-        return datetime.fromtimestamp(float(value)).strftime(format)
+        timediff = datetime.now() - datetime.fromtimestamp(float(value))
+        datetime_string = datetime.fromtimestamp(float(value)).strftime('%Y-%m-%dT%H:%M:%S')
+        return '<time datetime={datetime_string} title={datetime_string}>{timediff}</time>'.format(datetime_string=datetime_string, timediff=ago(timediff.total_seconds()))
 
 
 def prepare_html_data(config):
@@ -20,15 +24,23 @@ def prepare_html_data(config):
     result_data_plugins = {}
     json_plugins = get_json_or_empty_dict(config['plugins_config_path'])
     json_data = get_json_or_empty_dict(config['data_path'])
+    now = datetime.now().timestamp()
     for plugin_index, plugin_config in json_plugins.items():
         result_data_plugins[plugin_index] = {}
         result_data_plugins[plugin_index]['data'] = {}
+        # if there is valid data, use it. keep the empty dict otherwise
         if plugin_index in json_data and 'state' in json_data[plugin_index]['data']:
             result_data_plugins[plugin_index] = json_data[plugin_index]
+            # if the data is older than stale_age, change state to "STALE"
             if 'stale_age' in plugin_config and 'last_checked' in json_data[plugin_index]:
-                last_checked_age = datetime.now().timestamp() - float(json_data[plugin_index]['last_checked'])
+                last_checked_age = now - float(json_data[plugin_index]['last_checked'])
                 if  last_checked_age > float(plugin_config['stale_age']):
                     result_data_plugins[plugin_index]['data']['state'] = State.STALE.value
+            # if a short_text_type is defined, parse the short text accordingly
+            if 'short_text' in json_data[plugin_index]['data'] and 'short_text_type' in json_data[plugin_index]['data']:
+                short_text_type = json_data[plugin_index]['data']['short_text_type']
+                if short_text_type == SummaryType.TIMESTAMP_FOR_AGE.value:
+                    result_data_plugins[plugin_index]['data']['short_text'] = timestamp_to_formated_time(json_data[plugin_index]['data']['short_text'])
         # if no data for a configured plugin can be found, set default values
         else:
             print('No data found for plugin {}'.format(plugin_index))
@@ -36,7 +48,7 @@ def prepare_html_data(config):
             result_data_plugins[plugin_index]['data']['text'] = 'No data yet.'
         result_data_plugins[plugin_index]['data']['name'] = plugin_config['name']
     result_data = {}
-    result_data['time_now'] = datetime.now().timestamp()
+    result_data['time_now'] = now
     result_data['plugins'] = result_data_plugins
     return result_data
 

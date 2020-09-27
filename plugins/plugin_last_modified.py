@@ -2,7 +2,7 @@
 import sys
 import json
 from basics import State
-from basics import ago
+from basics import SummaryType
 import os
 import time
 
@@ -23,7 +23,7 @@ def run(config):
             timeformat = config['timeformat']
         else:
             timeformat = '%Y-%m-%dT%H:%M:%S'
-        return {"state": state.value, "text": "Last modified on {}".format(time.strftime(timeformat, time.localtime(last_modified))), "short_text": ago(now-last_modified)}
+        return {"state": state.value, "text": "Last modified on {}".format(time.strftime(timeformat, time.localtime(last_modified))), "short_text": last_modified, "short_text_type": SummaryType.TIMESTAMP_FOR_AGE.value}
     except OSError:
         return {"state": State.ERROR.value, "text": "Can't get last modified time of {}".format(config['path'])}
 
