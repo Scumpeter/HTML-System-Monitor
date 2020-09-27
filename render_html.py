@@ -23,7 +23,7 @@ def prepare_html_data(config):
     for plugin_index, plugin_config in json_plugins.items():
         result_data_plugins[plugin_index] = {}
         if plugin_index in json_data and 'state' in json_data[plugin_index]['data']:
-            result_data_plugins[plugin_index] = json_data[plugin_index]['data']
+            result_data_plugins[plugin_index] = json_data[plugin_index]
             if 'stale_age' in plugin_config and 'last_checked' in json_data[plugin_index]:
                 last_checked_age = datetime.now().timestamp() - float(json_data[plugin_index]['last_checked'])
                 if  last_checked_age > float(plugin_config['stale_age']):
@@ -50,7 +50,7 @@ def render_html(config):
     # load template
     template = templateEnv.get_template(config['template_path'])
     # start rendering with data from json data
-    rendered_html = template.render(data=prepare_html_data(config))
+    rendered_html = template.render(all_data=prepare_html_data(config))
     # write html file
     with open(config['output_path'], 'w') as html_output_file:
         html_output_file.write(rendered_html)

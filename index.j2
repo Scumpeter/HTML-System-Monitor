@@ -20,17 +20,17 @@
                 <div class="header plugin_last">Times</div>
             </div>
         </div>
-        {% for plugin_index, plugin in data.plugins.items() %}<div class="plugin" id="{{plugin_index|replace('\\040', '_')}}" onclick="toggle_hidden('{{plugin_index|replace('\\040', '_')}}')">
+        {% for plugin_index, plugin in all_data.plugins.items() %}<div class="plugin" id="{{plugin_index|replace('\\040', '_')}}" onclick="toggle_hidden('{{plugin_index|replace('\\040', '_')}}')">
             <div class="show_always">
-                <div class="content plugin_name" id="{{plugin_index|replace('\\040', '_')}}_name">{{plugin.name}}</div>
-                <div class="content plugin_state plugin_state_{{plugin.state}}" id="{{plugin_index|replace('\\040', '_')}}_state">{{ plugin.state }}</div>
+                <div class="content plugin_name" id="{{plugin_index|replace('\\040', '_')}}_name">{{plugin.data.name}}</div>
+                <div class="content plugin_state plugin_state_{{plugin.data.state}}" id="{{plugin_index|replace('\\040', '_')}}_state">{{ plugin.data.state }}</div>
                 <div class="content plugin_percentage" id="{{plugin_index|replace('\\040', '_')}}_percentage">{% if plugin.short_text is defined %}
-                    <div class="progress_bar progress_bar_{{plugin.state}}" style="width:{% if plugin.percentage is defined %}{{plugin.percentage}}%{% else %}0{% endif %}"></div>
-                    <div class="plugin_short_text">{{plugin.short_text}}</div>
+                    <div class="progress_bar progress_bar_{{plugin.data.state}}" style="width:{% if plugin.percentage is defined %}{{plugin.data.percentage}}%{% else %}0{% endif %}"></div>
+                    <div class="plugin_short_text">{{plugin.data.short_text}}</div>
                 {% else %}-{% endif %}</div>
             </div>
             <div class="show_on_demand" id="{{plugin_index|replace('\\040', '_')}}_hidden">
-                <div class="content plugin_text" id="{{plugin_index|replace('\\040', '_')}}_text">{{plugin.text}}</div>
+                <div class="content plugin_text" id="{{plugin_index|replace('\\040', '_')}}_text">{{plugin.data.text}}</div>
                 <div class="content plugin_last" id="{{plugin_index|replace('\\040', '_')}}_last">
                     Last check: {{ plugin.last_check|default(0)|timestamp_to_formated_time("%d.%m.%Y %H:%M:%S") }}<br/>
                     Last OK: {{ plugin.last_ok|default(0)|timestamp_to_formated_time("%d.%m.%Y %H:%M:%S") }}</div>
@@ -38,7 +38,7 @@
         </div>
         {% endfor %}
     </div>
-    <div class="timestamp">HTML generated on: {{ data.time_now|timestamp_to_formated_time("%d.%m.%Y %H:%M:%S") }}</div>
+    <div class="timestamp">HTML generated on: {{ all_data.time_now|timestamp_to_formated_time("%d.%m.%Y %H:%M:%S") }}</div>
 
     <script>
         function toggle_hidden(plugin_index) {
