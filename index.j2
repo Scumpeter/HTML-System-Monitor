@@ -25,7 +25,7 @@
                 <div class="content plugin_name" id="{{plugin_index|replace('\\040', '_')}}_name">{{plugin.data.name}}</div>
                 <div class="content plugin_state plugin_state_{{plugin.data.state}}" id="{{plugin_index|replace('\\040', '_')}}_state">{{ plugin.data.state }}</div>
                 <div class="content plugin_percentage" id="{{plugin_index|replace('\\040', '_')}}_percentage">{% if plugin.data.short_text is defined %}
-                    <div class="progress_bar progress_bar_{{plugin.data.state}}" style="width:{% if plugin.percentage is defined %}{{plugin.data.percentage}}%{% else %}0{% endif %}"></div>
+                    <div class="progress_bar progress_bar_{{plugin.data.state}}" style="width:{% if plugin.data.percentage is defined %}{{plugin.data.percentage}}%{% else %}0{% endif %}"></div>
                     <div class="plugin_short_text">{{plugin.data.short_text}}</div>
                 {% else %}-{% endif %}</div>
             </div>
