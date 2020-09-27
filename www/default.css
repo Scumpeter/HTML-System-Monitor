@@ -51,12 +51,13 @@ div.show_on_demand {
 }
 
 div.plugin_name {
-    width: 8em;
+    flex-basis: 11em;
     flex-grow: 1;
+    flex-shrink: 1;
 }
 
 div.plugin_state {
-    width: 2.5em;
+    flex-basis: 2.5em;
     flex-grow: 0;
 }
 
@@ -81,9 +82,10 @@ div.plugin_state_CRIT {
 }
 
 div.plugin_percentage {
-    width: 5em;
+    flex-basis: 8em;
     justify-content: flex-start;
     flex-grow: 1;
+    flex-shrink: 1;
     position: relative;
 }
 
@@ -140,7 +142,7 @@ div.progress_bar_WARN {
     }
 
     div.plugin_percentage {
-        width: 15em;
+        flex-basis: 15em;
         justify-content: flex-start;
         position: relative;
     }
