@@ -7,6 +7,7 @@ import datetime  # for parsing log time stamps
 import os       # to get path to this script for the config
 import sys      # to get command line arguments
 from basics import State
+from basics import SummaryType
 from basics import ago
 
 
@@ -47,13 +48,14 @@ def run(config):
         if timestamp_match != None:
             timestring = timestamp_match.group(1)
             log_time = datetime.datetime.strptime(timestring, '%Y-%m-%dT%H:%M:%S')
-            now = datetime.datetime.now()
-            timediff = now - log_time
-            short_text = ago(timediff.total_seconds())
+            short_text = log_time
     else:
         last_log_msg = 'Path {} not found in log file {}.'.format(
             config['path'], config['log_file'])
-    return {"state": state.value, "text": last_log_msg, "short_text": short_text}
+    if(short_text == "-"):
+        return {"state": state.value, "text": last_log_msg, "short_text": short_text}
+    else:
+        return {"state": state.value, "text": last_log_msg, "short_text": short_text, "short_text_type": SummaryType.TIMESTAMP_FOR_AGE.value}
 
 
 def get_default_config(config_file_path='/etc/rsnapshot.conf'):

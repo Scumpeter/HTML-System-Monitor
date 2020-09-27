@@ -10,6 +10,10 @@ class State(Enum):
     CRITICAL = "CRIT"
     STALE = "STALE"
 
+class SummaryType(Enum):
+    UNDEF = "UNDEF"
+    TIMESTAMP_FOR_AGE = "TIMESTAMP_FOR_AGE"
+
 def sizeof_fmt(num, suffix='B'):
     """Convert a value in bytes to a human readable form and add a binary prefix to it.
 
