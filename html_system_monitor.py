@@ -50,6 +50,9 @@ def collect_data(plugins_config_path, data_path):
     for plugin_index, plugin_config in full_plugin_config.items():
         # if a plugin is configured but has no data, start with an empty dict
         if not plugin_index in all_data:
+            all_data[plugin_index] = {}
+        # if no sub dict 'data' exists, create one
+        if not 'data' in all_data[plugin_index]:
             all_data[plugin_index]['data'] = {}
         # read from json file for manual_path plugins
         if 'manual_path' in plugin_config:
