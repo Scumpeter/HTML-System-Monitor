@@ -22,8 +22,8 @@ def prepare_html_data(config):
     json_data = get_json_or_empty_dict(config['data_path'])
     for plugin_index, plugin_config in json_plugins.items():
         result_data_plugins[plugin_index] = {}
-        if plugin_index in json_data and 'state' in json_data[plugin_index]:
-            result_data_plugins[plugin_index] = json_data[plugin_index]
+        if plugin_index in json_data and 'state' in json_data[plugin_index]['data']:
+            result_data_plugins[plugin_index] = json_data[plugin_index]['data']
             if 'stale_age' in plugin_config and 'last_checked' in json_data[plugin_index]:
                 last_checked_age = datetime.now().timestamp() - float(json_data[plugin_index]['last_checked'])
                 if  last_checked_age > float(plugin_config['stale_age']):
