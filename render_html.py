@@ -14,9 +14,9 @@ def timestamp_to_formated_time(value):
     if value==0:
         return 'never'
     else:
-        timediff = datetime.now() - datetime.fromtimestamp(float(value))
+        datetime_pretty_string = datetime.fromtimestamp(float(value)).strftime('%c')
         datetime_string = datetime.fromtimestamp(float(value)).strftime('%Y-%m-%dT%H:%M:%S')
-        return '<time datetime={datetime_string} title={datetime_string}>{timediff}</time>'.format(datetime_string=datetime_string, timediff=ago(timediff.total_seconds()))
+        return '<time datetime={datetime_string} title={datetime_string}>{datetime_pretty_string}</time>'.format(datetime_string=datetime_string, datetime_pretty_string=datetime_pretty_string)
 
 
 def prepare_html_data(config):
