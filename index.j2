@@ -32,8 +32,8 @@
             <div class="show_on_demand" id="{{plugin_index|replace('\\040', '_')}}_hidden">
                 <div class="content plugin_text" id="{{plugin_index|replace('\\040', '_')}}_text">{{plugin.data.text}}</div>
                 <div class="content plugin_last" id="{{plugin_index|replace('\\040', '_')}}_last">
-                    <span>Last check: {{ plugin.last_check|default(0)|timestamp_to_formated_time() }}<br/>
-                    Last OK: {{ plugin.last_ok|default(0)|timestamp_to_formated_time() }}</span></div>
+                    <span>{% if all_data.time_now - plugin.last_check > 300 %}Last check: {{ plugin.last_check|default(0)|timestamp_to_formated_time() }}{% if plugin.data.state != "OK" %}<br/>{% endif %}{% endif %}
+                    {% if plugin.data.state != "OK" %}Last OK: {{ plugin.last_ok|default(0)|timestamp_to_formated_time() }}{% endif %}</span></div>
             </div>
         </div>
         {% endfor %}
