@@ -79,7 +79,7 @@
                 }
             }
             var plural_appendix = '';
-            if (result != 1) {
+            if (Math.floor(result) != 1) {
                 plural_appendix = 's'
             }
             html_element.innerHTML = Math.floor(result) + ' ' + result_unit + plural_appendix + ' ago'
