@@ -33,7 +33,7 @@
                 <div class="content plugin_text" id="{{plugin_index|replace('\\040', '_')}}_text">{{plugin.data.text}}</div>
                 <div class="content plugin_last" id="{{plugin_index|replace('\\040', '_')}}_last">
                     <span>Last check: {{ plugin.last_check|default(0)|timestamp_to_formated_time() }}<br/>
-                    Last OK: {{ plugin.last_ok|default(0)|timestamp_to_formated_time() }}</div></span>
+                    Last OK: {{ plugin.last_ok|default(0)|timestamp_to_formated_time() }}</span></div>
             </div>
         </div>
         {% endfor %}
@@ -54,5 +54,35 @@
                 }
             }
         }
+
+        document.querySelectorAll('time').forEach(function ago(html_element) {
+            var object_date = new Date(html_element.dateTime);
+            var now = new Date();
+            var timediff = (now.getTime() - object_date.getTime()) / 1000;
+            let units = new Map();
+            units.set('second',  1);
+            units.set('minute', 60);
+            units.set('hour',   60);
+            units.set('day',    24);
+            units.set('week',    7);
+            var result = timediff;
+            var result_unit = 'second'
+            var divisor = 1;
+            for (let [unit, unit_size] of units) {
+                divisor = divisor * unit_size;
+                if ((timediff / divisor) >= 1) {
+                    result = timediff / divisor;
+                    result_unit = unit;
+                }
+                else {
+                    break;
+                }
+            }
+            var plural_appendix = '';
+            if (result != 1) {
+                plural_appendix = 's'
+            }
+            html_element.innerHTML = Math.floor(result) + ' ' + result_unit + plural_appendix + ' ago'
+        })
     </script>
 </body>
