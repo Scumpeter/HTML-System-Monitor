@@ -38,7 +38,7 @@
         </div>
         {% endfor %}
     </div>
-    <div class="timestamp">HTML generated on: {{ all_data.time_now|timestamp_to_formated_time() }}</div>
+    <div class="timestamp">HTML generated {{ all_data.time_now|timestamp_to_formated_time() }}</div>
 
     <script>
         function toggle_hidden(plugin_index) {
